@@ -26,4 +26,4 @@ const addAndSquare = (x: number, y: number): number => square(add(x, y));
 
 console.log(addAndSquare(3, 5));
 
-export {};
+export { };

@@ -127,20 +127,153 @@
 // console.log(html);
 
 
+// class Person {
+// 	private _name: string;
+// 	constructor(name: string) { this._name = name; }
+// 	public greet() { console.log(`Hi! My name is ${this._name}`) }
+// 	public greetDelay(time: number) {
+// 		setTimeout(() => {
+// 			console.log(`Hi! My name is ${this._name}`); // Error 
+// 		}, time);
+// 	}
+// }
+// let person = new Person("Remo");
+// person.greetDelay(1000); // Error
+
+// Person.prototype.greetDelay = function (time) {
+// 	const _this = this;
+// 	setTimeout(function () {
+// 		console.log(`Hi! My name is ${_this._name}`)
+// 	}, time);
+// }
+
+// person.greetDelay(1000);
+
+// function doSomethingAsync(
+// 	arr: number[],
+// 	success: (arr: number[]) => void,
+// 	error: (e: Error) => void) {
+// 	setTimeout(() => {
+// 		try {
+// 			let n = Math.ceil(Math.random() * 100 + 1);
+// 			if (n < 25) {
+// 				throw new Error("n is < 25");
+// 			}
+// 			success([...arr, n]);
+// 		} catch (e) {
+// 			error(e);
+// 		}
+// 	}, 1000);
+// }
+
+// const foo = () => {
+// 	return new Promise<string>((resolve, reject) => {
+// 		try {
+// 			resolve("SomeValue");
+// 		} catch (e) {
+// 			reject(e);
+// 		}
+// 	});
+// }
+
+// foo().then(value => console.log(value)).catch(e => console.log(e));
+
+// const doSomethingAsync = (arr: number[]) => new Promise<number[]>((resolve, reject) => {
+// 	setTimeout(() => {
+// 		try {
+// 			const n = Math.ceil(Math.random() * 100 + 1);
+// 			if (n < 25) throw new Error("n is < 25");
+// 			resolve([...arr, n]);
+// 		} catch (e) {
+// 			reject(e);
+// 		}
+// 	}, 1000);
+// });
+
+// doSomethingAsync([]).then(arr1 => doSomethingAsync(arr1).then(arr2 => doSomethingAsync(arr2).then(arr3 => console.log(arr3)))).catch(e => console.log(e));
+// doSomethingAsync([]).then(doSomethingAsync).then(doSomethingAsync).then(arr => console.log(arr)).catch(e => console.log(e));
+
+// const promiseAll = Promise.all([
+// 	doSomethingAsync([]),
+// 	doSomethingAsync([]),
+// 	doSomethingAsync([]),
+// ]).then(arr => console.log(JSON.stringify(arr))).catch(e => console.log(e));
+
+// const promiseWon = Promise.race([
+// 	doSomethingAsync([1]),
+// 	doSomethingAsync([2]),
+// 	doSomethingAsync([3]),
+// ]).then(value => console.log(value)).catch(e => console.log(e));
+
+// function* bar() {
+// 	yield 1;
+// 	yield 2;
+// 	yield 3;
+// 	yield 4;
+// 	yield 5;
+// 	return 6
+// }
+
+// const generator = bar();
+
+// console.log(generator.next());
+// console.log(generator.next());
+// console.log(generator.next());
+// console.log(generator.next());
+// console.log(generator.next());
+// console.log(generator.next());
+// console.log(generator.next());
+
+// const doSomethingAsync = (arr: number[]) => new Promise<number[]>((resolve, reject) => {
+// 	setTimeout(() => {
+// 		try {
+// 			const n = Math.ceil(Math.random() * 100 + 1);
+// 			if (n < 25) throw new Error("n is < 25");
+// 			resolve([...arr, n]);
+// 		} catch (e) {
+// 			reject(e);
+// 		}
+// 	}, 1000);
+// });
+
+// let counter = 0;
+
+// function doSomethingAsync() { return new Promise<number>((r) => { setTimeout(() => { counter += 1; r(counter); }, 1000); }); }
 
 
+// async function* g1() {
+// 	yield await doSomethingAsync();
+// 	yield await doSomethingAsync();
+// 	yield await doSomethingAsync();
+// }
+
+// const i: AsyncIterableIterator<number> = g1();
+// i.next().then(n => console.log(n));
+// i.next().then(n => console.log(n));
+// i.next().then(n => console.log(n));
+
+// function* g2() { yield 2; yield 3; yield 4; }
+
+// async function func() { for await (const x of g2()) { console.log(x); } }
+
+// (async () => { await func(); })()
+
+// function* g1() { yield 2; yield 3; yield 4; }
+
+// function* g2() { yield 1; yield* g1(); yield 5; }
+
+// var iterator1 = g2();
+// console.log(iterator1.next());
+// console.log(iterator1.next());
+// console.log(iterator1.next());
+// console.log(iterator1.next());
+// console.log(iterator1.next());
+// console.log(iterator1.next());
 
 
+// class Person { public name: string; public surname: string; public constructor(name: string, surname: string) { this.name = name; this.surname = surname; } public greet(city: string, country: string) { let msg = `Hi, my name is ${this.name} ${this.surname}.`; msg += `I'm from ${city} (${country}).`; console.log(msg); } }
 
+// const person = new Person("remo", "Jansen");
 
-
-
-
-
-
-
-
-export { };
-
-
-
+// person.greet.apply(person, ["seoul", "korea"]);
+// person.greet.call(person, "seoul", "korea");

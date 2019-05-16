@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // const add1: (y: number) => number = add(1);
 // const result: number = add1(3);
 // console.log(result);
-var add = function (x, y) { return x + y; };
-var square = function (x) { return x * x; };
-var addAndSquare = function (x, y) { return square(add(x, y)); };
+const add = (x, y) => x + y;
+const square = (x) => x * x;
+const addAndSquare = (x, y) => square(add(x, y));
 console.log(addAndSquare(3, 5));
 //# sourceMappingURL=practice-react.js.map
