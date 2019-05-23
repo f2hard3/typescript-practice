@@ -277,3 +277,302 @@
 
 // person.greet.apply(person, ["seoul", "korea"]);
 // person.greet.call(person, "seoul", "korea");
+
+// const name1 = "Remo";
+// const surname1 = "Jansen";
+// function Person(name, surname) {
+//   // instance properties 
+//   this.name = name;
+//   this.surname = surname;
+// }
+// const person1 = new Person(name1, surname1);
+// // person1.age = 27;
+
+// Person.prototype.age = 28;
+// Person.prototype.surname = surname1;
+
+// console.log(JSON.stringify(person1.age));
+
+// for (const property in person1) console.log("property: ", property, " value: ", person1[property]);
+
+// function makeArmy() {
+//   const shooters = [];
+//   for (let i = 0; i < 10; i++) {
+//     const shooter = () => {
+//       console.log(i);
+//     };
+//     shooters.push(shooter);
+//   }
+//   return shooters;
+// }
+
+// const army = makeArmy();
+// army[0]();
+// army[5]();
+// army[9]();
+
+// const trim = (s: string) => s.trim();
+// const capitalize = (s: string) => s.toUpperCase();
+
+// const trimAndCapitalize = (s: string) => capitalize(trim(s));
+
+// console.log(trimAndCapitalize("    hello world    "));
+
+// const compose = <T>(f: (x: T) => T, g: (x: T) => T) => (x: T) => f(g(x));
+
+// const trimAndCapitalize = compose(trim, capitalize);
+
+// console.log(trimAndCapitalize("    hello world    "));
+
+// const compose = <T1, T2, T3>(f: (x: T2) => T3, g: (x: T1) => T2) => (x: T1) => f(g(x))
+
+// const composeMany = <T>(...functions: Array<(arg: T) => T>) => (arg: any) => functions.reduce((prev, curr) => { return curr(prev); }, arg);
+// const composeMany = <T>(...args: Array<(x: T) => T>) => (x: T) => args.reduce((acc, cur) => cur(acc), x)
+
+// const composed = composeMany(trim, capitalize);
+// console.log(composed("    hello world    "));
+
+// const add = (a: number) => (b: number) => a + b;
+// const add3 = add(3);
+
+// console.log(add3(10));
+
+// const add = (a: number, b?: number) => b ? a + b : (b2: number) => a + b2;
+// const add3 = add(3) as (b2: number) => number
+
+// console.log(add3(10));
+
+// const trim = (s: string) => s.trim();
+// const capitalize = (s: string) => s.toUpperCase();
+
+// const replace = (f: string, r: string) => (s: string) => s.split(f).join(r);
+// const trimCapitalizeAndReplace = composeMany(trim, capitalize, replace("/", "-"));
+// console.log(trimCapitalizeAndReplace("  13/feb/1989  "));
+
+const add = (a: number, b: number) => a + b;
+const multiply = (a: number, b: number) => a * b;
+const curry2 = <T1, T2, T3>(fn: (x: T1, y: T2) => T3) => (x: T1) => (y: T2) => fn(x, y);
+const curry3 = <T1, T2, T3, T4>(fn: (x: T1, y: T2, z: T3) => T4) => (x: T1) => (y: T2) => (z: T3) => fn(x, y, z);
+
+// const curriedAdd = curry2(add);
+// const add5 = curriedAdd(5);
+// console.log(add5(10));
+
+// const curriedMultiply = curry2(multiply);
+// const multiply3 = curriedMultiply(3);
+// console.log(multiply3(3));
+
+// const composeMany = <T>(...args: Array<(x: T) => T>) => (x: T) => args.reduce((acc, cur) => cur(acc), x)
+// const trim = (s: string) => s.trim();
+// const capitalize = (s: string) => s.toUpperCase();
+
+// const replace = (s: string, f: string, r: string) => s.split(f).join(r);
+
+// const curriedReplace = curry3(replace);
+
+// const trimCapitalizeAndReplace = composeMany(trim, capitalize, curriedReplace("/")("-"))
+
+
+// const compose = <T1, T2, T3>(f: (x: T2) => T3, g: (x: T1) => T2) => (x: T1) => f(g(x)); 
+// const trim = (s: string) => s.trim(); 
+// const capitalize = (s: string) => s.toUpperCase(); 
+// const trimAndCapitalize = compose(trim, capitalize); 
+// const replace = (s: string, f: string, r: string) => s.split(f).join(r); 
+// const replaceForwardSlashWithDash = replace.bind(replace, "/", "-"); 
+// const trimCapitalizeAndReplace = compose(trimAndCapitalize, replaceForwardSlashWithDash);
+
+interface Person { age: number; birthCountry: string; naturalizationDate: Date; }
+
+// const OUR_COUNTRY = "Ireland";
+// const wasBornInCountry = (person: Person) => person.birthCountry === OUR_COUNTRY;
+// const wasNaturalized = (person: Person) => Boolean(person.naturalizationDate);
+// const isOver18 = (person: Person) => person.age >= 18;
+// const isCitizen = (person: Person) => wasBornInCountry(person) || wasNaturalized(person);
+// const isEligibleToVote = (person: Person) => isOver18(person) && isCitizen(person);
+
+// const either = <T1>(
+//   funcA: (a: T1) => boolean,
+//   funcB: (a: T1) => boolean
+// ) => (arg: T1) => funcA(arg) || funcB(arg);
+
+// const both = <T1>(
+//   funcA: (a: T1) => boolean,
+//   funcB: (a: T1) => boolean
+// ) => (arg: T1) => funcA(arg) && funcB(arg);
+
+// const OUR_COUNTRY = "Ireland";
+// const wasBornInCountry = (person: Person) => person.birthCountry === OUR_COUNTRY;
+// const wasNaturalized = (person: Person) => Boolean(person.naturalizationDate);
+// const isOver18 = (person: Person) => person.age >= 18;
+// const isCitizen = either<Person>(wasBornInCountry, wasNaturalized);
+// const isEligibleToVote = both(isCitizen, isOver18);
+
+// console.log(
+//   isEligibleToVote({
+//     age: 17,
+//     birthCountry: "Ireland",
+//     naturalizationDate: new Date()
+//   })
+// )
+
+// const factorial = (n: number): number => (n === 0) ? 1 : n * factorial(n - 1);
+
+// console.log(factorial(5));
+
+// const enum ShapeKind {
+//   circle = "circle",
+//   square = "square",
+//   rectangle = "rectangle"
+// }
+
+// type Circle = { kind: ShapeKind.circle, radius: number }
+// type Square = { kind: ShapeKind.square, size: number }
+// type Rectangle = { kind: ShapeKind.rectangle, w: number, h: number }
+
+// type Shape = Circle | Square | Rectangle;
+
+// const area = (shape: Shape) => {
+//   switch (shape.kind) {
+//     case ShapeKind.circle: return shape.radius ** 2 * 3.14
+//     case ShapeKind.square: return shape.size ** 2
+//     case ShapeKind.rectangle: return shape.w * shape.h
+//     default: throw new Error("Invalid shape!");
+//   }
+// }
+
+// class Container<T> {
+//   private _value: T;
+
+//   public constructor(val: T) {
+//     this._value = val;
+//   }
+
+//   public map<TMap>(fn: (val: T) => TMap) {
+//     return new Container<TMap>(fn(this._value));
+//   }
+// }
+
+// const double = (x: number) => x + x;
+// const container = new Container(3);
+// const container2 = container.map(double);
+// console.log(container2);
+
+// class Container<T> {
+//   public static of<TVal>(val: TVal) {
+//     return new Container(val);
+//   }
+
+//   private _value!: T;
+
+//   public constructor(val: T) {
+//     this._value = val;
+//   }
+
+//   public map<TMap>(fn: (val: T) => TMap) {
+//     return new Container<TMap>(fn(this._value));
+//   }
+
+//   public ap<TMap>(c: Container<(val: T) => TMap>) {
+//     return c.map(fn => this.map(fn));
+//   }
+// }
+
+// const double = (x: number) => x + x;
+// const numberContainer = Container.of(3);
+// const functionContainer = Container.of(double);
+
+// console.log(numberContainer.map(double));
+
+// console.log(numberContainer.ap(functionContainer));
+
+
+// namespace maybe_demo_1 {
+
+//   class MayBe<T> {
+
+//     public static of<TVal>(val?: TVal) {
+//       return new MayBe(val);
+//     }
+
+//     private _value!: T;
+
+//     public constructor(val?: T) {
+//       if (val) {
+//         this._value = val;
+//       }
+//     }
+
+//     public isNothing() {
+//       return (this._value === null || this._value === undefined);
+//     }
+
+//     public map<TMap>(fn: (val: T) => TMap) {
+//       if (this.isNothing()) {
+//         return new MayBe<TMap>();
+//       } else {
+//         return new MayBe<TMap>(fn(this._value));
+//       }
+//     }
+
+//     public ap<TMap>(c: MayBe<(val: T) => TMap>) {
+//       return c.map(fn => this.map(fn));
+//     }
+
+
+//   }
+
+//   interface New {
+//     subreddit: string;
+//     id: string;
+//     title: string;
+//     score: number;
+//     over_18: boolean;
+//     url: string;
+//     author: string;
+//     ups: number;
+//     num_comments: number;
+//     created_utc: number;
+//   }
+
+//   interface Response {
+//     kind: string;
+//     data: {
+//       modhash: string;
+//       whitelist_status: boolean | null;
+//       children: Array<{ kind: string, data: New }>;
+//       after: string | null;
+//       before: string | null;
+//     };
+//   }
+
+//   async function fetchNews() {
+//     return new Promise<MayBe<Response>>((resolve, reject) => {
+//       const url = "https://www.reddit.com/r/typescript/new.json";
+//       fetch(url)
+//         .then((response) => {
+//           return response.json();
+//         }).then((json) => {
+//           resolve(new MayBe(json));
+//         }).catch(() => {
+//           resolve(new MayBe());
+//         });
+//     });
+//   }
+
+//   (async () => {
+
+//     const maybeOfResponse = await fetchNews();
+
+//     const maybeOfNews = maybeOfResponse
+//       .map(r => r.data)
+//       .map(d => d.children)
+//       .map(children => children.map(c => c.data));
+
+//     maybeOfNews.map((news) => {
+//       news.forEach((n) => console.log(`${n.title} - ${n.url}`));
+//       return news;
+//     });
+
+//   })();
+
+// }
