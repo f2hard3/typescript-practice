@@ -576,3 +576,98 @@ interface Person { age: number; birthCountry: string; naturalizationDate: Date; 
 //   })();
 
 // }
+
+class Street {
+
+  public readonly num: number;
+  public readonly name: string;
+
+  public constructor(num: number, name: string) {
+    this.num = num;
+    this.name = name;
+  }
+
+}
+
+class Address {
+
+  public readonly city: string;
+  public readonly street: Street;
+
+  public constructor(city: string, street: Street) {
+    this.city = city;
+    this.street = street;
+  }
+
+}
+
+interface Lens<T1, T2> {
+  get(o: T1): T2;
+  set(o: T2, v: T1): T1;
+}
+
+function composeLens<A, B, C>(
+  ab: Lens<A, B>,
+  bc: Lens<B, C>
+): Lens<A, C> {
+  return {
+    get: (a: A) => bc.get(ab.get(a)),
+    set: (c: C, a: A) => ab.set(bc.set(c, ab.get(a)), a)
+  };
+}
+
+const streetLens: Lens<Address, Street> = {
+  get: (o: Address) => o.street,
+  set: (v: Street, a: Address) => new Address(a.city, v)
+}
+
+const nameLense: Lens<Street, string> = {
+  get: (o: Street) => o.name,
+  set: (v: string, o: Street) => new Street(o.num, v)
+}
+
+const streetNameLens = composeLens(streetLens, nameLense);
+
+const overLens = <S, A>(
+  lens: Lens<S, A>,
+  fn: (a: A) => A,
+  s: S
+) =>
+  lens.set(fn(lens.get(s)), s);
+
+type Prop<T, K extends keyof T> = (o: T) => T[K];
+type Assoc<T, K extends keyof T> = (v: T[K], o: T) => T;
+
+const propStreet: Prop<Address, "street"> = (o: Address) => o.street;
+const assocStreet: Assoc<Address, "street"> = (v: Address["street"], o: Address) => new Address(o.city, v);
+
+const lens = <T1, K extends keyof T1>(
+  getter: Prop<T1, K>,
+  setter: Assoc<T1, K>,
+): Lens<T1, T1[K]> => {
+  return {
+    get: (obj: T1) => getter(obj),
+    set: (val: T1[K], obj: T1) => setter(val, obj),
+  };
+}
+
+const streetLens2 = lens(propStreet, assocStreet);
+
+const view = <T1, T2>(lens: Lens<T1, T2>, obj: T1) => lens.get(obj);
+const set = <T1, K extends keyof T1>(lens: Lens<T1, T1[K]>, val: T1[K], obj: T1) => lens.set(val, obj);
+
+const address = new Address(
+  "London",
+  new Street(1, "rathbone square")
+);
+
+const street = view(streetLens, address);
+
+const address2 = set(
+  streetLens,
+  new Street(
+    address.street.num,
+    address.street.name.toUpperCase()
+  ),
+  address
+);
