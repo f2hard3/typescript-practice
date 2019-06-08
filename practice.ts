@@ -349,10 +349,10 @@
 // const trimCapitalizeAndReplace = composeMany(trim, capitalize, replace("/", "-"));
 // console.log(trimCapitalizeAndReplace("  13/feb/1989  "));
 
-const add = (a: number, b: number) => a + b;
-const multiply = (a: number, b: number) => a * b;
-const curry2 = <T1, T2, T3>(fn: (x: T1, y: T2) => T3) => (x: T1) => (y: T2) => fn(x, y);
-const curry3 = <T1, T2, T3, T4>(fn: (x: T1, y: T2, z: T3) => T4) => (x: T1) => (y: T2) => (z: T3) => fn(x, y, z);
+// const add = (a: number, b: number) => a + b;
+// const multiply = (a: number, b: number) => a * b;
+// const curry2 = <T1, T2, T3>(fn: (x: T1, y: T2) => T3) => (x: T1) => (y: T2) => fn(x, y);
+// const curry3 = <T1, T2, T3, T4>(fn: (x: T1, y: T2, z: T3) => T4) => (x: T1) => (y: T2) => (z: T3) => fn(x, y, z);
 
 // const curriedAdd = curry2(add);
 // const add5 = curriedAdd(5);
@@ -577,97 +577,451 @@ interface Person { age: number; birthCountry: string; naturalizationDate: Date; 
 
 // }
 
-class Street {
+// class Street {
 
-  public readonly num: number;
-  public readonly name: string;
+//   public readonly num: number;
+//   public readonly name: string;
 
-  public constructor(num: number, name: string) {
-    this.num = num;
-    this.name = name;
+//   public constructor(num: number, name: string) {
+//     this.num = num;
+//     this.name = name;
+//   }
+
+// }
+
+// class Address {
+
+//   public readonly city: string;
+//   public readonly street: Street;
+
+//   public constructor(city: string, street: Street) {
+//     this.city = city;
+//     this.street = street;
+//   }
+
+// }
+
+// interface Lens<T1, T2> {
+//   get(o: T1): T2;
+//   set(o: T2, v: T1): T1;
+// }
+
+// function composeLens<A, B, C>(
+//   ab: Lens<A, B>,
+//   bc: Lens<B, C>
+// ): Lens<A, C> {
+//   return {
+//     get: (a: A) => bc.get(ab.get(a)),
+//     set: (c: C, a: A) => ab.set(bc.set(c, ab.get(a)), a)
+//   };
+// }
+
+// const streetLens: Lens<Address, Street> = {
+//   get: (o: Address) => o.street,
+//   set: (v: Street, a: Address) => new Address(a.city, v)
+// }
+
+// const nameLense: Lens<Street, string> = {
+//   get: (o: Street) => o.name,
+//   set: (v: string, o: Street) => new Street(o.num, v)
+// }
+
+// const streetNameLens = composeLens(streetLens, nameLense);
+
+// const overLens = <S, A>(
+//   lens: Lens<S, A>,
+//   fn: (a: A) => A,
+//   s: S
+// ) =>
+//   lens.set(fn(lens.get(s)), s);
+
+// type Prop<T, K extends keyof T> = (o: T) => T[K];
+// type Assoc<T, K extends keyof T> = (v: T[K], o: T) => T;
+
+// const propStreet: Prop<Address, "street"> = (o: Address) => o.street;
+// const assocStreet: Assoc<Address, "street"> = (v: Address["street"], o: Address) => new Address(o.city, v);
+
+// const lens = <T1, K extends keyof T1>(
+//   getter: Prop<T1, K>,
+//   setter: Assoc<T1, K>,
+// ): Lens<T1, T1[K]> => {
+//   return {
+//     get: (obj: T1) => getter(obj),
+//     set: (val: T1[K], obj: T1) => setter(val, obj),
+//   };
+// }
+
+// const streetLens2 = lens(propStreet, assocStreet);
+
+// const view = <T1, T2>(lens: Lens<T1, T2>, obj: T1) => lens.get(obj);
+// const set = <T1, K extends keyof T1>(lens: Lens<T1, T1[K]>, val: T1[K], obj: T1) => lens.set(val, obj);
+
+// const address = new Address(
+//   "London",
+//   new Street(1, "rathbone square")
+// );
+
+// const street = view(streetLens, address);
+
+// const address2 = set(
+//   streetLens,
+//   new Street(
+//     address.street.num,
+//     address.street.name.toUpperCase()
+//   ),
+//   address
+// );
+
+// type Prop<T, K extends keyof T> = (o: T) => T[K];
+// type Assoc<T, K extends keyof T> = (v: K, o: T) => T
+
+// class Listener<T> {
+//   public update: (message: T) => void;
+
+//   public constructor(fn: (message: T) => void) {
+//     this.update = fn;
+//   }
+// }
+
+// class Producer<T> {
+//   private _listeners: Listener<T>[] = [];
+
+//   public add(listener: Listener<T>) {
+//     this._listeners.push(listener);
+//   }
+
+//   public remove(listener: Listener<T>) {
+//     this._listeners = this._listeners.filter(l => l !== listener);
+//   }
+
+//   public notify(message: T) {
+//     this._listeners.forEach(l => l.update(message));
+//   }
+// }
+
+// const listener1 = new Listener((message: string) => console.log(`Listener1: ${message}`));
+// const listener2 = new Listener((message: string) => console.log(`Listener2: ${message}`));
+
+// const notify = new Producer<string>();
+// notify.add(listener1);
+// notify.add(listener2);
+// notify.notify("Hello World!");
+
+// function* iterateOnMultiples(arr: number[], divisor: number) {
+//   for (let item of arr) {
+//     if (item % divisor === 0) yield item;
+//   }
+// }
+
+// const numberArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+// const iterator1 = iterateOnMultiples(numberArr, 3);
+// const iteratorResult1 = iterator1.next();
+
+// console.log(iteratorResult1.value);
+
+// if (!iteratorResult1.done) console.log(iterator1.next().value);
+
+// const iterator2 = iterateOnMultiples(numberArr, 3)
+
+// for (let value of iterator2) console.log(value);
+
+// import { of } from "rxjs";
+
+// const observable = of(1);
+
+// const subscription = observable.subscribe((value) => console.log(value), (error: any) => console.log(error), () => console.log("Done!"));
+
+// subscription.unsubscribe();
+
+// import { from } from "rxjs";
+
+// const observable = from([10, 20, 30]);
+
+// const subscription = observable.subscribe(value => console.log(value), err => console.log(err), () => console.log("Done!"));
+
+// subscription.unsubscribe();
+
+// import { interval } from "rxjs";
+
+// const observable = interval(10);
+
+// const subscription = observable.subscribe(value => console.log(value), err => console.log(err), () => console.log("Done!"));
+// subscription.unsubscribe();
+
+// import { fromEvent } from "rxjs"
+
+// const observable = fromEvent(document, "click");
+
+// const subscription = observable.subscribe((value) => console.log(value));
+
+// subscription.unsubscribe();
+
+// import { bindCallback } from "rxjs";
+// import fetch from "node-fetch";
+
+// const getJSON = (url: string, cb: (response: unknown | null) => void) => {
+//   fetch(url)
+//     .then(response => response.json())
+//     .then(json => cb(json))
+//     .catch(_ => cb(null));
+// }
+
+// const uri = "https://jsonplaceholder.typicode.com/todos/1";
+// const observableFactory = bindCallback(getJSON);
+// const observable = observableFactory(uri);
+
+// const subscription = observable.subscribe((value) => console.log(value), (error: any) => console.log(error), () => console.log("Done!"));
+// subscription.unsubscribe();
+
+// import { bindNodeCallback } from "rxjs";
+// import * as fs from "fs";
+
+// const observableFactory = bindNodeCallback(fs.readFile);
+// const observable = observableFactory("./roadNames.txt");
+
+// const subscription = observable.subscribe(value => console.log(value.toString()), (error: any) => console.log(error), () => console.log("Done!"));
+
+// subscription.unsubscribe();
+
+// import { bindCallback, from } from "rxjs";
+// import { map } from "lodash";
+// import fetch from "node-fetch";
+
+// const uri = "https://jsonplaceholder.typicode.com/todos/1"
+// const observable = from(fetch(uri));
+// const subscription = observable.subscribe(value => console.log(value.toString()));
+// subscription.unsubscribe();
+
+// import { from } from "rxjs";
+// import { max } from "rxjs/operators";
+
+// const observable = from<number[]>([2, 30, 22, 5, 60, 1]);
+
+// observable.pipe(max());
+
+// const subscription = observable.subscribe(console.log);
+// subscription.unsubscribe();
+
+// import { from } from "rxjs";
+// import { filter } from "rxjs/operators";
+
+// const observable = from([1, 2, 3, 4, 5]);
+
+// observable.pipe(filter(x => x < 10));
+
+// const subscription = observable.subscribe(console.log);
+// subscription.unsubscribe();
+
+// import { fromEvent, interval } from "rxjs";
+// import { throttle, mapTo, scan } from "rxjs/operators"
+
+// const observable = fromEvent(document, "click")
+//   .pipe(mapTo(1))
+//   .pipe(throttle(x => interval(100)))
+//   .pipe(scan((acc, one) => acc + one, 0));
+
+// const subscription = observable.subscribe(value => console.log)
+
+// import { from } from "rxjs";
+// import { merge } from "rxjs/operators"
+
+// const observableA = from([20, 40, 60, 80, 100]);
+// const observableB = from([1, 1]);
+
+// const observableC = observableA.pipe(merge(observableB));
+
+// const subscription = observableC.subscribe(console.log);
+
+// subscription.unsubscribe();
+
+// import { from } from "rxjs";
+// import { zip } from "rxjs/operators";
+
+// const observableA = from([1, 2, 3, 4, 5]);
+// const observableB = from(["A", "B", "C", "D"]);
+
+// const observableC = observableA.pipe(zip(observableB));
+
+// const subscription = observableC.subscribe(console.log, null, () => console.log("Done!"));
+
+// subscription.unsubscribe();
+
+// import R from "ramda";
+
+// const trim = (s: string) => s.trim();
+// const capitalize = (s: string) => s.toUpperCase();
+// const trimAndCapitalize = R.compose(trim, capitalize);
+// const result = trimAndCapitalize(" hello wrold ")
+// console.log(result);
+
+// import R from "ramda";
+// const trim = (s: string) => s.trim();
+// const capitalize = (s: string) => s.toUpperCase();
+// const replace = (s: string, f: string, r: string) => s.split(f).join(r);
+// const trimCapitalizeAndReplace = R.compose(R.compose(trim, capitalize), R.curry(replace)("/")("-"));
+// const result = trimCapitalizeAndReplace(" 13/feb/1989 ");
+// console.log(result); // "13-FEB-1989"
+
+// import R from "ramda";
+
+// class Street {
+//   public readonly num: number;
+//   public readonly name: string;
+
+//   public constructor(num: number, name: string) {
+//     this.num = num;
+//     this.name = name;
+//   }
+// }
+
+// class Address {
+//   public readonly city: string;
+//   public readonly street: Street;
+//   public constructor(city: string, street: Street) {
+//     this.city = city;
+//     this.street = street;
+//   }
+// }
+
+// const streetLens = R.lensProp("street");
+
+// const address = new Address(
+//   "London",
+//   new Street(1, "rathbone square")
+// );
+
+// const street = R.view<Address, Street>(streetLens, address);
+
+// const address2 = R.set<Address, Street>(
+//   streetLens,
+//   new Street(address.street.num,
+//     R.toUpper(address.street.name)
+//   ),
+//   address
+// )
+
+// console.log(street);
+// console.log(address2);
+
+
+// import { Record } from "immutable";
+
+// interface StreetInterface {
+//   num: number;
+//   name: string;
+// }
+
+// const StreetRecord = Record({
+//   num: 0,
+//   name: ""
+// })
+
+// class Street extends StreetRecord implements StreetInterface {
+//   constructor(props: StreetInterface) {
+//     super(props);
+//   }
+// }
+
+// interface AddressInterface {
+//   city: string;
+//   street: Street;
+// }
+
+// const AddressRecord = Record({
+//   city: "",
+//   street: new Street({ num: 0, name: "" })
+// });
+
+// class Address extends AddressRecord implements AddressInterface {
+//   constructor(props: AddressInterface) {
+//     super(props);
+//   }
+// }
+
+// const address = new Address({
+//   city: "London",
+//   street: new Street({
+//     num: 1,
+//     name: "rathbone square"
+//   })
+// })
+
+// const street = address.get("street");
+// const street2 = street.set("name", "Rathbone square");
+// const address2 = address.set("street", street2);
+// console.log(address.toJS(), address2.toJS())
+
+// import produce from "immer";
+
+// class Street {
+//   public readonly num: number;
+//   public readonly name: string;
+//   public constructor(num: number, name: string) {
+//     this.num = num;
+//     this.name = name;
+//   }
+// }
+// class Address {
+//   public readonly city: string;
+//   public readonly street: Street;
+//   public constructor(city: string, street: Street) {
+//     this.city = city;
+//     this.street = street;
+//   }
+// }
+
+// const address = new Address("London", new Street(1, "rathbone square"));
+// const address2 = produce(address, draftAddress => {
+//   draftAddress.street.name = "Rathbone square";
+// })
+
+import * as R from "ramda";
+import { IO, Success, Failure, Either, Left, Right } from "funfix";
+import fetch from "node-fetch";
+import * as fs from "fs";
+
+namespace funfix_demo_1 {
+
+  const argsIO = IO.of(() => R.tail(R.tail(process.argv))[0]);
+  const readFile = (filename: string) => IO.of(() => fs.readFileSync(filename, "utf8"));
+  const stdoutWrite = (data: string) => IO.of(() => process.stdout.write(data));
+
+  const loudCat = argsIO.chain(readFile)
+    .map(R.toUpper)
+    .chain(stdoutWrite);
+
+  try {
+    loudCat.run();
+  } catch (e) {
+    console.log(e);
   }
 
 }
 
-class Address {
+namespace funfix_demo_2 {
 
-  public readonly city: string;
-  public readonly street: Street;
-
-  public constructor(city: string, street: Street) {
-    this.city = city;
-    this.street = street;
+  interface Todo {
+    userId: number;
+    id: number;
+    title: string;
+    completed: boolean;
   }
 
+  const getTodos = IO.async<Either<Error, Todo[]>>((ec, cb) => {
+    fetch(
+      "https://jsonplaceholder.typicode.com/todos"
+    ).then(response => {
+      return response.json().then(
+        (json: Todo[]) => cb(Success(Right(json)))
+      )
+    })
+      .catch(err => cb(Failure(Left(err))));
+  });
+
+  const logTodos = getTodos.map((either) => {
+    return either.map(todos => todos.map(t => console.log(t.title)));
+  });
+
+  logTodos.run();
+
 }
-
-interface Lens<T1, T2> {
-  get(o: T1): T2;
-  set(o: T2, v: T1): T1;
-}
-
-function composeLens<A, B, C>(
-  ab: Lens<A, B>,
-  bc: Lens<B, C>
-): Lens<A, C> {
-  return {
-    get: (a: A) => bc.get(ab.get(a)),
-    set: (c: C, a: A) => ab.set(bc.set(c, ab.get(a)), a)
-  };
-}
-
-const streetLens: Lens<Address, Street> = {
-  get: (o: Address) => o.street,
-  set: (v: Street, a: Address) => new Address(a.city, v)
-}
-
-const nameLense: Lens<Street, string> = {
-  get: (o: Street) => o.name,
-  set: (v: string, o: Street) => new Street(o.num, v)
-}
-
-const streetNameLens = composeLens(streetLens, nameLense);
-
-const overLens = <S, A>(
-  lens: Lens<S, A>,
-  fn: (a: A) => A,
-  s: S
-) =>
-  lens.set(fn(lens.get(s)), s);
-
-type Prop<T, K extends keyof T> = (o: T) => T[K];
-type Assoc<T, K extends keyof T> = (v: T[K], o: T) => T;
-
-const propStreet: Prop<Address, "street"> = (o: Address) => o.street;
-const assocStreet: Assoc<Address, "street"> = (v: Address["street"], o: Address) => new Address(o.city, v);
-
-const lens = <T1, K extends keyof T1>(
-  getter: Prop<T1, K>,
-  setter: Assoc<T1, K>,
-): Lens<T1, T1[K]> => {
-  return {
-    get: (obj: T1) => getter(obj),
-    set: (val: T1[K], obj: T1) => setter(val, obj),
-  };
-}
-
-const streetLens2 = lens(propStreet, assocStreet);
-
-const view = <T1, T2>(lens: Lens<T1, T2>, obj: T1) => lens.get(obj);
-const set = <T1, K extends keyof T1>(lens: Lens<T1, T1[K]>, val: T1[K], obj: T1) => lens.set(val, obj);
-
-const address = new Address(
-  "London",
-  new Street(1, "rathbone square")
-);
-
-const street = view(streetLens, address);
-
-const address2 = set(
-  streetLens,
-  new Street(
-    address.street.num,
-    address.street.name.toUpperCase()
-  ),
-  address
-);

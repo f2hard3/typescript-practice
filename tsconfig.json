@@ -2,8 +2,10 @@
 	"compilerOptions": {
 		"lib": ["dom", "es2018", "es2015.promise"],
 		"target": "es2018",
-		"module": "esnext",
+		"module": "commonjs",
 		"outDir": "out",
-		"sourceMap": true
+		"sourceMap": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true
 	}
 }

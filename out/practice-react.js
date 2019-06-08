@@ -1,8 +1,10 @@
+"use strict";
 // const add = (a: number, b: number): number => a + b;
 // const log = (fn: Function) => (...arg: any[]): Function => {
 //     console.log(...arg);
 //     return fn(...arg)
 // }
+Object.defineProperty(exports, "__esModule", { value: true });
 // const loggedAdd = log(add);
 // const result = loggedAdd(2, 3);
 // console.log(result)
